@@ -1,6 +1,6 @@
 {
   "name": "html-nested-comments",
-  "displayName": "html-nested-comments",
+  "displayName": "HTML Nested Comments",
   "description":
     "This is a VSCode extension allowing you to quickly comment out blocks of HTML code that already contain HTML comments.",
   "version": "1.0.0",
@@ -22,6 +22,7 @@
     "vscode": "^1.17.0"
   },
   "categories": ["Other"],
+  "icon": "images/icon.png",
   "activationEvents": ["onCommand:extension.nestComments"],
   "main": "./out/extension",
   "contributes": {
