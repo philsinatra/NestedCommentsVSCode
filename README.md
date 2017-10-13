@@ -1,3 +1,9 @@
+![Visual Studio Marketplace](https://img.shields.io/vscode-marketplace/v/philsinatra.html-nested-comments.svg?style=flat-square)
+[![Visual Studio Marketplace](https://img.shields.io/vscode-marketplace/d/philsinatra.html-nested-comments.svg?style=flat-square)]()
+[![license](https://img.shields.io/github/license/philsinatra/htmlNestedCommentsVSCode.svg?style=flat-square)](https://github.com/philsinatra/htmlNestedCommentsVSCode/blob/master/LICENSE)
+
+![HTML Nested Comments icon](images/icon.png)
+
 # HTML Nested Comments
 
 **The problem**: if your HTML code contains a comment, and you want to add a new comment to temporarily disable a block or portion of code, the built in commenting functionality does not actually place the comment tags in expected locations. If an existing comment is included in the content being commented out, the first instance of a `-->` closing comment tag will end the entire comment.
