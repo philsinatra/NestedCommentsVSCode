@@ -1,60 +1,57 @@
 {
-    "name": "html-nested-comments",
-    "displayName": "HTML Nested Comments",
-    "description": "This is a VSCode extension allowing you to quickly comment out blocks of HTML code that already contain HTML comments.",
-    "version": "1.1.1",
-    "publisher": "philsinatra",
-    "author": {
-        "name": "Phil Sinatra",
-        "email": "phil@philsinatra.com"
-    },
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/philsinatra/htmlNestedCommentsVSCode.git"
-    },
-    "bugs": {
-        "url": "https://github.com/philsinatra/htmlNestedCommentsVSCode/issues"
-    },
-    "homepage": "http://philsinatra.com/html-nested-comments.html",
-    "engines": {
-        "vscode": "^1.17.0"
-    },
-    "categories": [
-        "Other"
+  "name": "html-nested-comments",
+  "displayName": "HTML Nested Comments",
+  "description":
+    "This is a VSCode extension allowing you to quickly comment out blocks of HTML code that already contain HTML comments.",
+  "version": "1.1.2",
+  "publisher": "philsinatra",
+  "author": {
+    "name": "Phil Sinatra",
+    "email": "phil@philsinatra.com"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/philsinatra/htmlNestedCommentsVSCode.git"
+  },
+  "bugs": {
+    "url": "https://github.com/philsinatra/htmlNestedCommentsVSCode/issues"
+  },
+  "homepage": "http://philsinatra.com/html-nested-comments.html",
+  "engines": {
+    "vscode": "^1.17.0"
+  },
+  "categories": ["Other"],
+  "icon": "images/icon.png",
+  "activationEvents": ["onCommand:extension.nestComments"],
+  "main": "./out/extension",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.nestComments",
+        "title": "Nest HTML Comments"
+      }
     ],
-    "icon": "images/icon.png",
-    "activationEvents": [
-        "onCommand:extension.nestComments"
-    ],
-    "main": "./out/extension",
-    "contributes": {
-        "commands": [
-            {
-                "command": "extension.nestComments",
-                "title": "Nest HTML Comments"
-            }
-        ],
-        "keybindings": [
-            {
-                "command": "extension.nestComments",
-                "key": "ctrl+/",
-                "mac": "ctrl+/",
-                "when": "editorTextFocus && editorHasSelection"
-            }
-        ]
-    },
-    "scripts": {
-        "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "npm run compile && node ./node_modules/vscode/bin/test"
-    },
-    "devDependencies": {
-        "typescript": "^2.5.3",
-        "vscode": "^1.1.5",
-        "@types/node": "^7.0.43",
-        "@types/mocha": "^2.2.42"
-    }
+    "keybindings": [
+      {
+        "command": "extension.nestComments",
+        "key": "ctrl+alt+/",
+        "mac": "cmd+alt+/",
+        "when": "editorTextFocus && editorHasSelection"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "npm run compile && node ./node_modules/vscode/bin/test"
+  },
+  "devDependencies": {
+    "typescript": "^2.5.3",
+    "vscode": "^1.1.5",
+    "@types/node": "^7.0.43",
+    "@types/mocha": "^2.2.42"
+  }
 }

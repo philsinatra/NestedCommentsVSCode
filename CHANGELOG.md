@@ -3,6 +3,10 @@ All notable changes to the "html-nested-comments" extension will be documented i
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.1.2] 🔧 Fix Keybinding
+
+- Adjust default keybinding so the package does not hijack the default commenting key binding for Windows users.
+
 ## [1.1.1]
 - Update Trigger 'When' Case
 
