@@ -1,9 +1,8 @@
 {
-  "name": "html-nested-comments",
-  "displayName": "HTML Nested Comments",
-  "description":
-    "This is a VSCode extension allowing you to quickly comment out blocks of HTML code that already contain HTML comments.",
-  "version": "1.1.2",
+  "name": "nested-comments",
+  "displayName": "Nest Comments",
+  "description": "This is a VSCode extension for toggling nested comments.",
+  "version": "1.2.0",
   "publisher": "philsinatra",
   "author": {
     "name": "Phil Sinatra",
@@ -12,10 +11,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/philsinatra/htmlNestedCommentsVSCode.git"
+    "url": "https://github.com/philsinatra/NestedCommentsVSCode"
   },
   "bugs": {
-    "url": "https://github.com/philsinatra/htmlNestedCommentsVSCode/issues"
+    "url": "https://github.com/philsinatra/NestedCommentsVSCode/issues"
   },
   "homepage": "http://philsinatra.com/html-nested-comments.html",
   "engines": {
@@ -29,7 +28,7 @@
     "commands": [
       {
         "command": "extension.nestComments",
-        "title": "Nest HTML Comments"
+        "title": "Nest Comments"
       }
     ],
     "keybindings": [

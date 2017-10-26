@@ -40,6 +40,7 @@ class NestComments {
     const supported = [
       'asp',
       'cfm',
+      'css',
       'htm',
       'html',
       'md',
@@ -54,19 +55,37 @@ class NestComments {
       const selection = editor.selection;
       const text = editor.document.getText(selection);
 
-      const prefix = text.substring(0, 4);
+      let prefix;
       let mod_text = '';
 
-      if (prefix !== '<!--') {
-        mod_text = text.replace(/<!--/g, '<!~~');
-        mod_text = mod_text.replace(/-->/g, '~~>');
-        mod_text = '<!-- ' + mod_text + ' -->';
+      if (doc.languageId === 'css') {
+        prefix = text.substring(0, 2);
+
+        if (prefix !== '/*') {
+          mod_text = text.replace(/\/\*/g, '/~');
+          mod_text = mod_text.replace(/ \*\//g, '~/');
+          mod_text = '/* ' + mod_text + ' */';
+        } else {
+          mod_text = text.replace(/\/\*/g, '');
+          mod_text = mod_text.replace(/\/\*/g, '');
+          mod_text = mod_text.replace(/\*\//g, '');
+          mod_text = mod_text.replace(/\/~/g, '/*');
+          mod_text = mod_text.replace(/\~\//g, '*/');
+        }
       } else {
-        mod_text = text.replace(/<!-- /g, '');
-        mod_text = mod_text.replace(/<!--/g, '');
-        mod_text = mod_text.replace(/-->/g, '');
-        mod_text = mod_text.replace(/<!~~/g, '<!--');
-        mod_text = mod_text.replace(/~~>/g, '-->');
+        prefix = text.substring(0, 4);
+
+        if (prefix !== '<!--') {
+          mod_text = text.replace(/<!--/g, '<!~~');
+          mod_text = mod_text.replace(/-->/g, '~~>');
+          mod_text = '<!-- ' + mod_text + ' -->';
+        } else {
+          mod_text = text.replace(/<!-- /g, '');
+          mod_text = mod_text.replace(/<!--/g, '');
+          mod_text = mod_text.replace(/-->/g, '');
+          mod_text = mod_text.replace(/<!~~/g, '<!--');
+          mod_text = mod_text.replace(/~~>/g, '-->');
+        }
       }
 
       let edit = new vscode.WorkspaceEdit();

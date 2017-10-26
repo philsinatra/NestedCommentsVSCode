@@ -3,6 +3,8 @@ All notable changes to the "html-nested-comments" extension will be documented i
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.2.0] 🔧 Add CSS Syntax Support
+
 ## [1.1.2] 🔧 Fix Keybinding
 
 - Adjust default keybinding so the package does not hijack the default commenting key binding for Windows users.
