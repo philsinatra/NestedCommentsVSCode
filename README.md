@@ -1,8 +1,14 @@
-![Visual Studio Marketplace](https://img.shields.io/vscode-marketplace/v/philsinatra.html-nested-comments.svg?style=flat-square)
-[![Visual Studio Marketplace](https://img.shields.io/vscode-marketplace/d/philsinatra.html-nested-comments.svg?style=flat-square)]()
-[![license](https://img.shields.io/github/license/philsinatra/htmlNestedCommentsVSCode.svg?style=flat-square)](https://github.com/philsinatra/htmlNestedCommentsVSCode/blob/master/LICENSE)
+![Visual Studio Marketplace](https://img.shields.io/vscode-marketplace/v/philsinatra.nested-comments.svg?style=flat-square)
+[![Visual Studio Marketplace](https://img.shields.io/vscode-marketplace/d/philsinatra.nested-comments.svg?style=flat-square)]()
+[![license](https://img.shields.io/github/license/philsinatra/NestedCommentsVSCode.svg?style=flat-square)](https://github.com/philsinatra/NestedCommentsVSCode/blob/master/LICENSE)
 
 # Nest Comments
+
+## 🎉 Version 2 🎉
+
+The package has been renamed to _Nest Comments_, and now supports both the HTML syntax of commenting `<!-- -->` and the CSS syntax `/* */`.
+
+## About
 
 **The problem**: if your code contains a comment, and you want to add a new comment to temporarily disable a block or portion of code, the built in commenting functionality does not actually place the comment tags in expected locations. If an existing comment is included in the content being commented out, the first instance of a `-->` or `*/` closing comment tag will end the entire comment.
 
@@ -69,9 +75,5 @@ The following file formats are supported:
 None at this time 😃
 
 ## Release Notes
-
-### Version 1.2 CSS syntax support
-
-The package has been renamed to _Nest Comments_, and now supports both the HTML syntax of commenting `<!-- -->` and the CSS syntax `/* */`.
 
 Full release notes are available in the CHANGELOG file.

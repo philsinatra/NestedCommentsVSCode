@@ -3,7 +3,7 @@ All notable changes to the "html-nested-comments" extension will be documented i
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [1.2.0] 🔧 Add CSS Syntax Support
+## [2.0.0] 🔧 Add CSS Syntax Support
 
 ## [1.1.2] 🔧 Fix Keybinding
 
