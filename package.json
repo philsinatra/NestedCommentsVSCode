@@ -2,7 +2,7 @@
   "name": "nested-comments",
   "displayName": "Nest Comments",
   "description": "This is a VSCode extension for toggling nested comments.",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "publisher": "philsinatra",
   "author": {
     "name": "Phil Sinatra",
@@ -20,7 +20,8 @@
   "engines": {
     "vscode": "^1.17.0"
   },
-  "categories": ["Other"],
+  "categories": ["Formatters", "Other"],
+  "keywords": ["comment", "html", "css"],
   "icon": "images/icon.png",
   "activationEvents": ["onCommand:extension.nestComments"],
   "main": "./out/extension",
