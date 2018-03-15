@@ -48,7 +48,8 @@ class NestComments {
       'php',
       'svg',
       'vue',
-      'xml'
+      'xml',
+      'xsl'
     ];
 
     if (supported.indexOf(doc.languageId) > -1) {
