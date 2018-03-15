@@ -3,6 +3,8 @@ All notable changes to the "html-nested-comments" extension will be documented i
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [2.1.0] 📚 Add `XSL` File Support
+
 ## [2.0.2] 📚 Update `multi-root ready` Status
 
 ## [2.0.1] 📚 Update `package.json` Keywords/Categories
