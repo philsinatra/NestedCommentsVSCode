@@ -25,7 +25,7 @@ If you need to comment out a portion of your code that includes pre-existing com
 ```html
 <main role="main">
 <!-- A comment that's very important -->
-	<p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
 </main>
 ```
 
@@ -42,7 +42,7 @@ Becomes:
 
 ```css
 body {
-	/* margin: 0; */
+  /* margin: 0; */
 }
 ```
 
@@ -50,7 +50,7 @@ Becomes:
 
 ```css
 /* body {
-	/~ margin: 0; ~/
+  /~ margin: 0; ~/
 } */
 ```
 
@@ -69,6 +69,7 @@ The following file formats are supported:
 - svg
 - vue
 - xml
+- xsl
 
 ## Known Issues
 
