@@ -54,6 +54,15 @@ Becomes:
 } */
 ```
 
+## How-To
+
+The commands are listed in the *contributes.keybindings* object in the *package.json* file.
+By default:
+- **For Windows/Linux:** *ctrl+alt+/*
+- **For Mac:** *cmd+alt+/*
+
+Note that the command works after the text has been selected.
+
 ## Extension Settings
 
 The following file formats are supported:
