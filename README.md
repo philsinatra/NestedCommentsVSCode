@@ -54,6 +54,15 @@ Becomes:
 } */
 ```
 
+## Usage
+
+To trigger the extension, highlight the text that should be commented/uncommented.
+
+### Default Keybindings
+
+- Mac: <kbd>cmd</kbd> + <kbd>alt</kbd> + <kbd>/</kbd>
+- Windows: <kbd>ctrl</kbd> + <kbd>alt</kbd> + <kbd>/</kbd>
+
 ## Extension Settings
 
 The following file formats are supported:
