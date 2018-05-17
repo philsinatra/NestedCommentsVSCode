@@ -4,6 +4,8 @@ All notable changes to the "html-nested-comments" extension will be documented i
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [2.1.3] 🖼️ Update Icon
+
 ## [2.1.2] 🎨 Remove Extra Space In CSS Comments
 
 ## [2.1.1] 📚 Update README
