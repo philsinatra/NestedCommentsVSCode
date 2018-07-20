@@ -64,7 +64,7 @@ class NestComments {
 
         if (prefix !== '/*') {
           mod_text = text.replace(/\/\*/g, '/~');
-          mod_text = mod_text.replace(/ \*\//g, '~/');
+          mod_text = mod_text.replace(/\*\//g, '~/');
           mod_text = '/*' + mod_text + '*/';
         } else {
           mod_text = text.replace(/\/\*/g, '');
