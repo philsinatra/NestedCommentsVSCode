@@ -4,54 +4,66 @@
 
 # Nest Comments
 
-## 🎉 Version 2 🎉
-
-The package has been renamed to _Nest Comments_, and now supports both the HTML syntax of commenting `<!-- -->` and the CSS syntax `/* */`.
-
 ## About
 
-**The problem**: if your code contains a comment, and you want to add a new comment to temporarily disable a block or portion of code, the built in commenting functionality does not actually place the comment tags in expected locations. If an existing comment is included in the content being commented out, the first instance of a `-->` or `*/` closing comment tag will end the entire comment.
+If your code contains a comment, and you want to add a new comment to temporarily disable a block or portion of code, the built in commenting functionality does not actually place the comment tags in expected locations. If an existing comment is included in the content being commented out, the first instance of a `-->` or `*/` closing comment tag will end the entire comment.
 
-**The solution**: The extension very simply finds all comments within the highlighted block of code and converts dashes to tildes, and then places the comment tags in the expected locations. It also then reverses the effect to un-comment the same code.
+This extension will convert pre-existing comments to safe characters, allowing a new block comment that includes the original comment. It also reverses the effect to uncomment the same block of code.
 
 ## Features
 
 If you need to comment out a portion of your code that includes pre-existing comments, the native commenting functionality will not comment properly or preserve your existing comments. This extension will maintain your original comments and allow you to quickly toggle comments on sections of code.
 
-![code before nesting](images/demo.gif)
+## Examples
 
-### HTML Sample
+### HTML Syntax
+
+![HTML example](images/html.gif)
 
 ```html
-<main role="main">
-<!-- A comment that's very important -->
-  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+<main>
+  <div class="container">
+    <h2>Hello World</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+    <!-- <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p> -->
+  </div>
 </main>
 ```
 
 Becomes:
 
 ```html
-<!-- <main role="main">
-<!~~ A comment that's very important ~~>
-	<p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+<!-- <main>
+  <div class="container">
+    <h2>Hello World</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+    <!~~ <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p> ~~>
+  </div>
 </main> -->
 ```
 
-### CSS Sample
+### CSS Syntax
+
+![CSS example](images/css.gif)
 
 ```css
-body {
-  /* margin: 0; */
+.example {
+  /* display: flex; */
+  transition: all 0.5s;
+  /* user-select: none; */
+  background: linear-gradient(to bottom, white, black);
 }
 ```
 
 Becomes:
 
 ```css
-/* body {
-  /~ margin: 0; ~/
-} */
+/*.example {
+  /~ display: flex; ~/
+  transition: all 0.5s;
+  /~ user-select: none; ~/
+  background: linear-gradient(to bottom, white, black);
+}*/
 ```
 
 ## Usage

@@ -4,6 +4,10 @@ All notable changes to the "html-nested-comments" extension will be documented i
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## 2018-07-27
+
+- 💡 Update Documentation
+
 ## [2.1.4] 🐛 Fix CSS Spacing Bug
 
 ## [2.1.3] 🖼️ Update Icon

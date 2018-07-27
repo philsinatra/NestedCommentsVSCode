@@ -24,32 +24,41 @@
 		"Formatters",
 		"Other"
 	],
+	"galleryBanner": {
+		"color": "#000000",
+		"theme": "dark"
+	},
 	"keywords": [
 		"comment",
 		"html",
 		"css",
-		"multi-root ready"
+		"multi-root ready",
+		"web development",
+		"scss",
+		"stylus",
+		"format"
 	],
 	"icon": "images/icon.png",
+	"screenshots": [{
+		"path": "images/html.gif"
+	}, {
+		"path": "images/css.gif"
+	}],
 	"activationEvents": [
 		"onCommand:extension.nestComments"
 	],
 	"main": "./out/extension",
 	"contributes": {
-		"commands": [
-			{
-				"command": "extension.nestComments",
-				"title": "Nest Comments"
-			}
-		],
-		"keybindings": [
-			{
-				"command": "extension.nestComments",
-				"key": "ctrl+alt+/",
-				"mac": "cmd+alt+/",
-				"when": "editorTextFocus && editorHasSelection"
-			}
-		]
+		"commands": [{
+			"command": "extension.nestComments",
+			"title": "Nest Comments"
+		}],
+		"keybindings": [{
+			"command": "extension.nestComments",
+			"key": "ctrl+alt+/",
+			"mac": "cmd+alt+/",
+			"when": "editorTextFocus && editorHasSelection"
+		}]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
