@@ -18,7 +18,7 @@ If you need to comment out a portion of your code that includes pre-existing com
 
 ### HTML Syntax
 
-![HTML example](images/html.gif)
+![HTML example](images/nest_html.gif)
 
 ```html
 <main>
@@ -44,7 +44,7 @@ Becomes:
 
 ### CSS Syntax
 
-![CSS example](images/css.gif)
+![CSS example](images/nest_css.gif)
 
 ```css
 .example {
