@@ -18,7 +18,7 @@ If you need to comment out a portion of your code that includes pre-existing com
 
 ### HTML Syntax
 
-![HTML example](images/nest_html.gif)
+![HTML example](images/nest-html.gif)
 
 ```html
 <main>
@@ -44,7 +44,7 @@ Becomes:
 
 ### CSS Syntax
 
-![CSS example](images/nest_css.gif)
+![CSS example](images/nest-css.gif)
 
 ```css
 .example {
@@ -66,6 +66,38 @@ Becomes:
 }*/
 ```
 
+### JSX Syntax
+
+![CSS example](images/nest-react.gif)
+
+```jsx
+<React.Fragment>
+  <div className="footer" id="footer" ref={this.props.reference}>
+    <footer role="contentinfo">
+      <nav>
+        {/* <FooterPrev prev={this.props.pageNav.prev} /> */}
+        <FooterNext next={this.props.pageNav.next} />
+      </nav>
+    </footer>
+  </div>
+</React.Fragment>
+```
+
+Becomes:
+
+```jsx
+<React.Fragment>
+  {/*<div className="footer" id="footer" ref={this.props.reference}>
+    <footer role="contentinfo">
+      <nav>
+        {/~ <FooterPrev prev={this.props.pageNav.prev} /> ~/}
+        <FooterNext next={this.props.pageNav.next} />
+      </nav>
+    </footer>
+  </div>*/}
+</React.Fragment>
+```
+
 ## Usage
 
 To trigger the extension, highlight the text that should be commented/uncommented.
@@ -77,13 +109,14 @@ To trigger the extension, highlight the text that should be commented/uncommente
 
 ## Extension Settings
 
-The following file formats are supported:
+The following languages are supported:
 
 - asp
 - cfm
 - css
 - htm
 - html
+- jsx
 - md
 - njk
 - php

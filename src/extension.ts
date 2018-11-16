@@ -43,6 +43,7 @@ class NestComments {
       'css',
       'htm',
       'html',
+      'javascriptreact',
       'md',
       'njk',
       'php',
@@ -59,9 +60,9 @@ class NestComments {
       let prefix;
       let mod_text = '';
 
-      if (doc.languageId === 'css') {
+      switch (doc.languageId) {
+      case 'css':
         prefix = text.substring(0, 2);
-
         if (prefix !== '/*') {
           mod_text = text.replace(/\/\*/g, '/~');
           mod_text = mod_text.replace(/\*\//g, '~/');
@@ -73,9 +74,24 @@ class NestComments {
           mod_text = mod_text.replace(/\/~/g, '/*');
           mod_text = mod_text.replace(/\~\//g, '*/');
         }
-      } else {
-        prefix = text.substring(0, 4);
+        break;
 
+      case 'javascriptreact':
+        prefix = text.substring(0, 3);
+        if (prefix !== '{/*') {
+          mod_text = text.replace(/\/\*/g, '/~');
+          mod_text = mod_text.replace(/\*\//g, '~/');
+          mod_text = '{/*' + mod_text + '*/}';
+        } else {
+          mod_text = text.replace(/{\/\*/g, '');
+          mod_text = mod_text.replace(/\*\/}/g, '');
+          mod_text = mod_text.replace(/\/~/g, '/*');
+          mod_text = mod_text.replace(/\~\//g, '*/');
+        }
+        break;
+
+      default:
+        prefix = text.substring(0, 4);
         if (prefix !== '<!--') {
           mod_text = text.replace(/<!--/g, '<!~~');
           mod_text = mod_text.replace(/-->/g, '~~>');
@@ -87,6 +103,7 @@ class NestComments {
           mod_text = mod_text.replace(/<!~~/g, '<!--');
           mod_text = mod_text.replace(/~~>/g, '-->');
         }
+        break;
       }
 
       let edit = new vscode.WorkspaceEdit();
