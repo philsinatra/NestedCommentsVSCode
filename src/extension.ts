@@ -47,6 +47,7 @@ class NestComments {
       'md',
       'njk',
       'php',
+      'twig',
       'svg',
       'vue',
       'xml',
@@ -87,6 +88,20 @@ class NestComments {
           mod_text = mod_text.replace(/\*\/}/g, '');
           mod_text = mod_text.replace(/\/~/g, '/*');
           mod_text = mod_text.replace(/\~\//g, '*/');
+        }
+        break;
+
+      case 'twig':
+        prefix = text.substring(0, 2);
+        if (prefix !== '{#') {
+          mod_text = text.replace(/{\#/g, '{~#');
+          mod_text = mod_text.replace(/\#}/g, '#~}');
+          mod_text = '{# ' + mod_text + ' #}';
+        } else {
+          mod_text = text.replace(/{\# /g, '');
+          mod_text = mod_text.replace(/ \#}/g, '');
+          mod_text = mod_text.replace(/{\~\#/g, '{#');
+          mod_text = mod_text.replace(/\#\~}/g, '#}');
         }
         break;
 

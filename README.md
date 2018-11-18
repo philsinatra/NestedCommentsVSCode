@@ -121,6 +121,7 @@ The following languages are supported:
 - njk
 - php
 - svg
+- twig
 - vue
 - xml
 - xsl
