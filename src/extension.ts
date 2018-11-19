@@ -44,6 +44,7 @@ class NestComments {
       'htm',
       'html',
       'javascriptreact',
+      'typescriptreact',
       'md',
       'njk',
       'php',
@@ -78,6 +79,7 @@ class NestComments {
         break;
 
       case 'javascriptreact':
+      case 'typescriptreact':
         prefix = text.substring(0, 3);
         if (prefix !== '{/*') {
           mod_text = text.replace(/\/\*/g, '/~');

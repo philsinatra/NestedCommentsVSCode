@@ -7,6 +7,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## 2018-11-19
 
 - ⬆️ Fix Dependency Vulnerabilities
+- ✨ Add Typescript React Language Support
 
 ## 2018-11-18
 

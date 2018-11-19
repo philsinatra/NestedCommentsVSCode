@@ -68,7 +68,9 @@ Becomes:
 
 ### JSX Syntax
 
-![CSS example](images/nest-react.gif)
+![JSX example](images/nest-react.gif)
+
+This commenting style will work for JSX content in `.js` and `.ts` files. Make sure to set the language mode of the file to `javascriptreact`/`typescriptreact` rather than using standard JavaScript for files using JSX.
 
 ```jsx
 <React.Fragment>
@@ -121,6 +123,7 @@ The following languages are supported:
 - njk
 - php
 - svg
+- tsx
 - twig
 - vue
 - xml
