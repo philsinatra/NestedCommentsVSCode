@@ -4,6 +4,10 @@ All notable changes to the "html-nested-comments" extension will be documented i
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## 2018-11-21
+
+- 💄 Update Icon
+
 ## 2018-11-19
 
 - ⬆️ Fix Dependency Vulnerabilities
