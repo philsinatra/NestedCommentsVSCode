@@ -29,6 +29,106 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(disposable);
 }
 
+function isWhitespace(character:string) {
+  return character === ' ' || character === '\r' || character === '\n' || character === '\t';
+}
+
+function extendWhitespaceOffset(text:string, offset:number, reverse:boolean, maxLines:number = Infinity) {
+  const delta = reverse ? -1 : 1;
+  while (reverse ? offset > 0 : offset < text.length) {
+    const character = text.charAt(reverse ? offset - 1 : offset);
+    if (!isWhitespace(character)) {
+      break;
+    }
+    offset += delta;
+    if (character === '\r' || character === '\n') {
+      const nextCharacter = text.charAt(offset + delta);
+      if (
+        (nextCharacter === '\r' || nextCharacter === '\n') &&
+        character != nextCharacter
+      ) {
+        offset += delta;
+      }
+      if (--maxLines <= 0) {
+        break;
+      }
+    }
+  }
+  return offset;
+}
+
+class FragmentRange {
+  index:number = -1;
+  start:number = -1;
+  end:number = -1;
+  isDocBlock:boolean = false;
+
+  constructor(text:string, search:string, offset:number, reverse:boolean) {
+    // Shift search offset to edge of padding
+    offset = extendWhitespaceOffset(text, offset, !reverse);
+    if (reverse) {
+      this.index = text.lastIndexOf(search, offset);
+    } else {
+      // Note the adjustment by search.length
+      this.index = text.indexOf(search, offset/* - search.length*/);
+    }
+    if (this.index === -1) {
+      return;
+    }
+    // If there was a match then the match positions are again extended past whitespace
+    this.start = extendWhitespaceOffset(text, this.index, true);
+    this.end = extendWhitespaceOffset(text, this.index + search.length, false);
+    this.isDocBlock = text.substring(this.index, this.index + 3) === '/**';
+  }
+
+  contains(offset:number) {
+    return offset >= this.start && offset <= this.end;
+  }
+
+  exists() {
+    return this.index !== -1;
+  }
+}
+
+function decreaseCommentNesting(text:string, descriptor:any) {
+  let index = 0;
+  let depth = 0;
+  while (true) {
+    let openIndex = text.indexOf(descriptor.fake[0], index);
+    let closeIndex = text.indexOf(descriptor.fake[1], index);
+    if (openIndex !== -1 && openIndex < closeIndex) {
+      if (depth === 0) {
+        text = text.substring(0, openIndex) + descriptor.real[0] + text.substring(openIndex + descriptor.fake[0].length);
+      }
+      index = openIndex + 1;
+      ++depth;
+    } else if (closeIndex !== -1) {
+      index = closeIndex + 1;
+      --depth;
+      if (depth === 0) {
+        text = text.substring(0, closeIndex) + descriptor.real[1] + text.substring(closeIndex + descriptor.fake[1].length);
+      }
+    } else {
+      break;
+    }
+  }
+  return text;
+}
+
+function replaceAll(text:string, search:string, replace:string) {
+  // It is 2019 and JavaScript still doesn't have a raw string find & replace all method,
+  // so this needs to be escaped.
+  const escaped = search.replace(/./g, function(character:string) {
+    return `\\x${character.charCodeAt(0).toString(16)}`;
+  });
+  return text.replace(new RegExp(escaped, 'g'), replace);
+}
+
+function increaseCommentNesting(text:string, descriptor:any) {
+  text = replaceAll(text, descriptor.real[0], descriptor.fake[0]);
+  return replaceAll(text, descriptor.real[1], descriptor.fake[1]);
+}
+
 class NestComments {
   public updateNestedComments() {
     let editor = vscode.window.activeTextEditor;
@@ -37,109 +137,175 @@ class NestComments {
     }
 
     const doc = editor.document;
-    const supported = [
-      'asp',
-      'cfm',
-      'css',
-      'htm',
-      'html',
-      'javascriptreact',
-      'typescriptreact',
-      'md',
-      'njk',
-      'php',
-      'twig',
-      'svg',
-      'vue',
-      'xml',
-      'xsl'
-    ];
+    const c_like = {
+      real: ['/*', '*/'],
+      fake: ['/~', '~/'],
+    };
+    const jsx = {
+      real: ['{/*', '*/}'],
+      fake: ['/~', '~/' ],
+    };
+    const xml = {
+      real: ['<!--', '-->'],
+      fake: ['<!~~', '~~>'],
+    };
+    const supported = {
+      'asp': xml,
+      'c': c_like,
+      'cpp': c_like,
+      'csharp': c_like,
+      'cfm': xml,
+      'css': c_like,
+      'htm': xml,
+      'html': xml,
+      'java': c_like,
+      'javascript': c_like,
+      'javascriptreact': jsx,
+      'md': xml,
+      'njk': xml,
+      'objective-c': c_like,
+      'objective-cpp': c_like,
+      'php': xml,
+      'ruby': {
+        real: ['\n=begin\n', '\n=end'],
+        fake: ['\n~begin\n', '\n~end'],
+      },
+      'twig': {
+        real: ['{#', '#}'],
+        fake: ['{~#', '#~}'],
+      },
+      'svg': xml,
+      'swift': c_like,
+      'typescript': c_like,
+      'typescriptreact': jsx,
+      'vue': xml,
+      'xml': xml,
+      'xsl': xml,
+    };
 
-    if (supported.indexOf(doc.languageId) > -1) {
-      const selection = editor.selection;
-      const text = editor.document.getText(selection);
+    const descriptor = supported[doc.languageId];
+    if (descriptor === undefined) {
+      vscode.window.showInformationMessage(`File format '${doc.languageId}' not supported!`);
+      return;
+    }
 
-      let prefix;
-      let mod_text = '';
+    const text = doc.getText();
+    const selection = editor.selection;
+    const leftOffset = doc.offsetAt(selection.start);
+    const rightOffset = doc.offsetAt(selection.end);
 
-      switch (doc.languageId) {
-      case 'css':
-        prefix = text.substring(0, 2);
-        if (prefix !== '/*') {
-          mod_text = text.replace(/\/\*/g, '/~');
-          mod_text = mod_text.replace(/\*\//g, '~/');
-          mod_text = '/*' + mod_text + '*/';
-        } else {
-          mod_text = text.replace(/\/\*/g, '');
-          mod_text = mod_text.replace(/\/\*/g, '');
-          mod_text = mod_text.replace(/\*\//g, '');
-          mod_text = mod_text.replace(/\/~/g, '/*');
-          mod_text = mod_text.replace(/\~\//g, '*/');
-        }
-        break;
+    let leftGutterStart:number, leftGutterLength:number = 0;
+    let rightGutterStart:number, rightGutterLength:number = 0;
+    let textStart:number, textEnd:number;
+    let leftFragment:string = '', rightFragment:string = '';
+    let newText:string;
 
-      case 'javascriptreact':
-      case 'typescriptreact':
-        prefix = text.substring(0, 3);
-        if (prefix !== '{/*') {
-          mod_text = text.replace(/\/\*/g, '/~');
-          mod_text = mod_text.replace(/\*\//g, '~/');
-          mod_text = '{/*' + mod_text + '*/}';
-        } else {
-          mod_text = text.replace(/{\/\*/g, '');
-          mod_text = mod_text.replace(/\*\/}/g, '');
-          mod_text = mod_text.replace(/\/~/g, '/*');
-          mod_text = mod_text.replace(/\~\//g, '*/');
-        }
-        break;
+    const leftOpenComment = new FragmentRange(text, descriptor.real[0], leftOffset, true);
+    const leftCloseComment = new FragmentRange(
+      text, descriptor.real[1],
+      // This prevents a comment like /*/ from being interpreted as both open and close
+      Math.min(leftOpenComment.exists() ? leftOpenComment.index : Infinity, leftOffset),
+      true
+    );
+    const nextOpenComment = new FragmentRange(text, descriptor.real[0], leftOffset, false);
+    const nextCloseComment = new FragmentRange(text, descriptor.real[1], leftOffset, false);
+    const rightPrevOpenComment = new FragmentRange(text, descriptor.real[0], rightOffset, true);
+    const rightPrevCloseComment = new FragmentRange(text, descriptor.real[1], rightOffset, true);
 
-      case 'twig':
-        prefix = text.substring(0, 2);
-        if (prefix !== '{#') {
-          mod_text = text.replace(/{\#/g, '{~#');
-          mod_text = mod_text.replace(/\#}/g, '#~}');
-          mod_text = '{# ' + mod_text + ' #}';
-        } else {
-          mod_text = text.replace(/{\# /g, '');
-          mod_text = mod_text.replace(/ \#}/g, '');
-          mod_text = mod_text.replace(/{\~\#/g, '{#');
-          mod_text = mod_text.replace(/\#\~}/g, '#}');
-        }
-        break;
-
-      default:
-        prefix = text.substring(0, 4);
-        if (prefix !== '<!--') {
-          mod_text = text.replace(/<!--/g, '<!~~');
-          mod_text = mod_text.replace(/-->/g, '~~>');
-          mod_text = '<!-- ' + mod_text + ' -->';
-        } else {
-          mod_text = text.replace(/<!-- /g, '');
-          mod_text = mod_text.replace(/<!--/g, '');
-          mod_text = mod_text.replace(/-->/g, '');
-          mod_text = mod_text.replace(/<!~~/g, '<!--');
-          mod_text = mod_text.replace(/~~>/g, '-->');
-        }
-        break;
+    if (
+      leftOpenComment.exists() &&
+      (!leftCloseComment.exists() || leftCloseComment.index < leftOpenComment.index) &&
+      (!nextCloseComment.exists() ||
+      rightOffset < nextCloseComment.index || nextCloseComment.contains(rightOffset))
+    ) {
+      // Uncommenting a block
+      if (leftOpenComment.contains(leftOffset) && !leftOpenComment.isDocBlock) {
+        // Left intersects with uncommented area
+        leftGutterStart = leftOpenComment.index;
+        leftGutterLength = descriptor.real[0].length;
+        textStart = Math.max(leftOffset, leftOpenComment.index + descriptor.real[0].length);
+      } else {
+        leftGutterStart = extendWhitespaceOffset(text, leftOffset, true, 1);
+        leftFragment = descriptor.real[1];
       }
+      if (nextCloseComment.contains(rightOffset) && !leftOpenComment.isDocBlock) {
+        // Right intersects with an existing comment
+        rightGutterStart = nextCloseComment.index;
+        rightGutterLength = descriptor.real[1].length;
+        textEnd = Math.min(rightOffset, nextCloseComment.index);
+      } else {
+        rightGutterStart = extendWhitespaceOffset(text, rightOffset, false, 1);
+        rightFragment = descriptor.real[0];
+      }
+      // Splice the comment
+      textStart = textStart || leftOffset;
+      textEnd = textEnd || rightOffset;
+      newText = text.substring(textStart, textEnd);
+      newText = decreaseCommentNesting(newText, descriptor);
+    } else if (
+      (!leftOpenComment.exists() ||
+      (leftCloseComment.exists() && leftOpenComment.index < leftCloseComment.index)) &&
+      (
+        !rightPrevCloseComment.exists() ||
+        rightPrevCloseComment.index <= leftCloseComment.index ||
+        (rightPrevOpenComment.exists() && (
+          rightPrevOpenComment.index < rightPrevCloseComment.index ||
+          rightPrevOpenComment.contains(rightOffset))
+        )
+      )
+    ) {
+      // Commenting a block
+      if (leftCloseComment.contains(leftOffset) && !leftOpenComment.isDocBlock) {
+        // Left intersects with an existing comment
+        leftGutterStart = leftCloseComment.index;
+        leftGutterLength = descriptor.real[1].length;
+        textStart = Math.max(leftOffset, leftCloseComment.index + descriptor.real[1].length);
+      } else {
+        leftFragment = descriptor.real[0];
+      }
+      if (nextOpenComment.contains(rightOffset) && !nextOpenComment.isDocBlock) {
+        // Right intersects with an existing comment
+        rightGutterStart = nextOpenComment.index;
+        rightGutterLength = descriptor.real[0].length;
+        textEnd = Math.min(rightOffset, nextOpenComment.index);
+      } else if (rightPrevOpenComment.contains(rightOffset) && !rightPrevOpenComment.isDocBlock) {
+        // Right intersects with an existing comment
+        rightGutterStart = rightPrevOpenComment.index;
+        rightGutterLength = descriptor.real[0].length;
+        textEnd = Math.min(rightOffset, rightPrevOpenComment.index);
+      } else {
+        rightFragment = descriptor.real[1];
+      }
+      // Splice the comment
+      textStart = textStart || leftOffset;
+      textEnd = textEnd || rightOffset;
+      newText = text.substring(textStart, textEnd);
+      newText = increaseCommentNesting(newText, descriptor);
+    }
 
-      let edit = new vscode.WorkspaceEdit();
-
-      const startPos: vscode.Position = new vscode.Position(
-        selection.start.line,
-        selection.start.character
+    if (newText !== undefined) {
+      const edit = new vscode.WorkspaceEdit();
+      if (leftGutterStart === undefined) {
+        leftGutterStart = textStart;
+      }
+      if (rightGutterStart === undefined) {
+        rightGutterStart = textEnd;
+      }
+      const range = new vscode.Range(doc.positionAt(leftGutterStart), doc.positionAt(rightGutterStart + rightGutterLength));
+      edit.replace(doc.uri, range,
+        leftFragment +
+        text.substring(leftGutterStart + leftGutterLength, textStart) +
+        newText +
+        text.substring(textEnd, rightGutterStart) +
+        rightFragment
       );
-      const endPos: vscode.Position = new vscode.Position(
-        selection.start.line + text.split(/\r\n|\r|\n/).length - 1,
-        selection.start.character + text.length
-      );
 
-      const range = new vscode.Range(startPos, endPos);
-
-      edit.replace(editor.document.uri, range, mod_text);
-      return vscode.workspace.applyEdit(edit);
-    } else {
-      vscode.window.showInformationMessage('File format not supported!');
+      return vscode.workspace.applyEdit(edit).then(function() {
+        editor.selection = new vscode.Selection(
+          doc.positionAt(textStart + leftFragment.length - leftGutterLength),
+          doc.positionAt(newText.length + textStart + leftFragment.length - leftGutterLength)
+        );
+      });
     }
   }
 }
