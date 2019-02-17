@@ -4,6 +4,16 @@ All notable changes to the "html-nested-comments" extension will be documented i
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## 2019-02-17
+
+- 🚀 Laverdet Update
+
+Special thanks to [laverdet](https://github.com/laverdet) for a major update, which includes:
+
+- support for additional languages (full list of supported languages is available in the README file)
+- flexible selections: selections don't need to be exact, so if you want to uncomment a block and your selection is off by just whitespace you can still activate the command
+- partial uncommenting: if you make a selection within a larger comment block and activate the command you can uncomment just a subset of the larger block
+
 ## 2018-11-21
 
 - 💄 Update Icon
