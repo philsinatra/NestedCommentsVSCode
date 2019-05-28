@@ -114,27 +114,17 @@ To trigger the extension, highlight the text that should be commented/uncommente
 The following languages are supported:
 
 - asp
-- c
-- cpp
-- csharp
 - cfm
 - css
 - htm
 - html
-- java
-- javascript
-- javascriptreact
+- jsx
 - md
 - njk
-- 'objective-c'
-- 'objective-cpp'
 - php
-- ruby
-- twig
 - svg
-- swift
-- typescript
-- typescriptreact
+- tsx
+- twig
 - vue
 - xml
 - xsl

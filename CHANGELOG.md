@@ -4,6 +4,12 @@ All notable changes to the "html-nested-comments" extension will be documented i
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## 2019-05-28
+
+- 🐛 Fix HTML Nesting Bug
+
+Revert Laverdet update. Separate branch with Laverdet code pushed as a debug source.
+
 ## 2019-02-17
 
 - 🚀 Laverdet Update
