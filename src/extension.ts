@@ -52,7 +52,8 @@ class NestComments {
       'svg',
       'vue',
       'xml',
-      'xsl'
+      'xsl',
+      'blade'
     ];
 
     if (supported.indexOf(doc.languageId) > -1) {
@@ -104,6 +105,20 @@ class NestComments {
           mod_text = mod_text.replace(/ \#}/g, '');
           mod_text = mod_text.replace(/{\~\#/g, '{#');
           mod_text = mod_text.replace(/\#\~}/g, '#}');
+        }
+        break;
+          
+      case 'blade':
+        prefix = text.substring(0, 4);
+        if (prefix !== '{{--') {
+          mod_text = text.replace(/{{--/g, '{{~~');
+          mod_text = mod_text.replace(/--}}/g, '~~}}');
+          mod_text = '{{-- ' + mod_text + ' --}}';
+        } else {
+          mod_text = text.replace(/{{-- /g, '');
+          mod_text = mod_text.replace(/ --}}/g, '');
+          mod_text = mod_text.replace(/{{~~/g, '{{--');
+          mod_text = mod_text.replace(/~~}}/g, '--}}');
         }
         break;
 
