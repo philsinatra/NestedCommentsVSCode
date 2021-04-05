@@ -43,6 +43,8 @@ class NestComments {
       'css',
       'htm',
       'html',
+      'javascript',
+      'typescript',
       'javascriptreact',
       'typescriptreact',
       'md',
@@ -64,6 +66,8 @@ class NestComments {
 
       switch (doc.languageId) {
       case 'css':
+      case 'javascript':
+      case 'typescript':
         prefix = text.substring(0, 2);
         if (prefix !== '/*') {
           mod_text = text.replace(/\/\*/g, '/~');
