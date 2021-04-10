@@ -59,6 +59,8 @@ class NestComments {
 			'css',
 			'htm',
 			'html',
+			'javascript',
+			'typescript',
 			'javascriptreact',
 			'typescriptreact',
 			'md',
@@ -83,6 +85,8 @@ class NestComments {
 				case 'c':
 				case 'csharp':
 				case 'java':
+				case 'javascript':
+				case 'typescript':
 					mod_text = text.replace(/\/\*/g, '/~');
 					mod_text = mod_text.replace(/\*\//g, '~/');
 					mod_text = '/*' + mod_text + '*/';
@@ -142,6 +146,8 @@ class NestComments {
 			'css',
 			'htm',
 			'html',
+			'javascript',
+			'typescript',
 			'javascriptreact',
 			'typescriptreact',
 			'md',
@@ -166,8 +172,9 @@ class NestComments {
 				case 'c':
 				case 'csharp':
 				case 'java':
+				case 'javascript':
+				case 'typescript':
 					mod_text = text.replace(/\/\*/g, '');
-					mod_text = mod_text.replace(/\/\*/g, '');
 					mod_text = mod_text.replace(/\*\//g, '');
 					mod_text = mod_text.replace(/\/~/g, '/*');
 					mod_text = mod_text.replace(/\~\//g, '*/');
@@ -273,36 +280,6 @@ class NestComments {
 
 		return text;
 	}
-
-
-	// private UncommentXML(text : string) : string {
-	// 	let scanNextLevel=true;
-	// 	let level=1;
-	// 	let lastLevelStart='<!~~';
-	// 	let lastLevelEnd='~~>';
-
-
-	// 	text = text.replace('<!--', '');
-	// 	text = text.replace('-->', '');
-
-	// 	while (scanNextLevel) {
-	// 		let nextLevelStart='<~'+level.toString();
-	// 		let nextLevelEnd=level.toString()+'~>';
-
-	// 		if (text.indexOf(nextLevelStart)!=-1) {
-	// 			text = text.replace(nextLevelStart,lastLevelStart);
-	// 			text = text.replace(nextLevelEnd,lastLevelEnd);
-
-	// 			++level;
-	// 			lastLevelStart=nextLevelStart;
-	// 			lastLevelEnd=nextLevelEnd;
-	// 		} else {
-	// 			scanNextLevel=false;
-	// 		}
-	// 	}
-
-	// 	return text;
-	// }
 }
 
 // this method is called when your extension is deactivated
