@@ -8,6 +8,12 @@
 		"name": "Phil Sinatra",
 		"email": "phil@philsinatra.com"
 	},
+	"contributors": [
+		{
+			"name": "Melvin 'Melcx' Rey",
+			"email": "melcx@hotmail.fr"
+		}
+	],
 	"license": "MIT",
 	"repository": {
 		"type": "git",
@@ -48,21 +54,32 @@
 		}
 	],
 	"activationEvents": [
-		"onCommand:extension.nestComments"
+		"onCommand:extension.nestComment",
+		"onCommand:extension.nestUncomment"
 	],
 	"main": "./out/extension",
 	"contributes": {
 		"commands": [
 			{
-				"command": "extension.nestComments",
-				"title": "Nest Comments"
+				"command": "extension.nestComment",
+				"title": "Comment selection"
+			},
+			{
+				"command": "extension.nestUncomment",
+				"title": "Uncomment selection"
 			}
 		],
 		"keybindings": [
 			{
-				"command": "extension.nestComments",
-				"key": "ctrl+alt+/",
-				"mac": "cmd+alt+/",
+				"command": "extension.nestComment",
+				"key": "ctrl+shift+alt+c",
+				"mac": "cmd+shift+alt+c",
+				"when": "editorTextFocus && editorHasSelection"
+			},
+			{
+				"command": "extension.nestUncomment",
+				"key": "ctrl+shift+alt+d",
+				"mac": "cmd+shift+alt+d",
 				"when": "editorTextFocus && editorHasSelection"
 			}
 		]
@@ -78,6 +95,6 @@
 		"@types/mocha": "^2.2.42",
 		"@types/node": "^7.0.43",
 		"typescript": "^2.5.3",
-		"vscode": "^1.1.21"
+		"vscode": "^1.1.37"
 	}
 }
