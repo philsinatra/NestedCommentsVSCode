@@ -1,4 +1,5 @@
 'use strict';
+
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
@@ -50,6 +51,7 @@ class NestComments {
       'php',
       'twig',
       'svg',
+      'tpl',
       'vue',
       'xml',
       'xsl'
@@ -63,64 +65,65 @@ class NestComments {
       let mod_text = '';
 
       switch (doc.languageId) {
-      case 'css':
-        prefix = text.substring(0, 2);
-        if (prefix !== '/*') {
-          mod_text = text.replace(/\/\*/g, '/~');
-          mod_text = mod_text.replace(/\*\//g, '~/');
-          mod_text = '/*' + mod_text + '*/';
-        } else {
-          mod_text = text.replace(/\/\*/g, '');
-          mod_text = mod_text.replace(/\/\*/g, '');
-          mod_text = mod_text.replace(/\*\//g, '');
-          mod_text = mod_text.replace(/\/~/g, '/*');
-          mod_text = mod_text.replace(/\~\//g, '*/');
-        }
-        break;
+        case 'css':
+          prefix = text.substring(0, 2);
+          if (prefix !== '/*') {
+            mod_text = text.replace(/\/\*/g, '/~');
+            mod_text = mod_text.replace(/\*\//g, '~/');
+            mod_text = '/*' + mod_text + '*/';
+          } else {
+            mod_text = text.replace(/\/\*/g, '');
+            mod_text = mod_text.replace(/\/\*/g, '');
+            mod_text = mod_text.replace(/\*\//g, '');
+            mod_text = mod_text.replace(/\/~/g, '/*');
+            mod_text = mod_text.replace(/\~\//g, '*/');
+          }
+          break;
 
-      case 'javascriptreact':
-      case 'typescriptreact':
-        prefix = text.substring(0, 3);
-        if (prefix !== '{/*') {
-          mod_text = text.replace(/\/\*/g, '/~');
-          mod_text = mod_text.replace(/\*\//g, '~/');
-          mod_text = '{/*' + mod_text + '*/}';
-        } else {
-          mod_text = text.replace(/{\/\*/g, '');
-          mod_text = mod_text.replace(/\*\/}/g, '');
-          mod_text = mod_text.replace(/\/~/g, '/*');
-          mod_text = mod_text.replace(/\~\//g, '*/');
-        }
-        break;
+        case 'javascriptreact':
+        case 'typescriptreact':
+          prefix = text.substring(0, 3);
+          if (prefix !== '{/*') {
+            mod_text = text.replace(/\/\*/g, '/~');
+            mod_text = mod_text.replace(/\*\//g, '~/');
+            mod_text = '{/*' + mod_text + '*/}';
+          } else {
+            mod_text = text.replace(/{\/\*/g, '');
+            mod_text = mod_text.replace(/\*\/}/g, '');
+            mod_text = mod_text.replace(/\/~/g, '/*');
+            mod_text = mod_text.replace(/\~\//g, '*/');
+          }
+          break;
 
-      case 'twig':
-        prefix = text.substring(0, 2);
-        if (prefix !== '{#') {
-          mod_text = text.replace(/{\#/g, '{~#');
-          mod_text = mod_text.replace(/\#}/g, '#~}');
-          mod_text = '{# ' + mod_text + ' #}';
-        } else {
-          mod_text = text.replace(/{\# /g, '');
-          mod_text = mod_text.replace(/ \#}/g, '');
-          mod_text = mod_text.replace(/{\~\#/g, '{#');
-          mod_text = mod_text.replace(/\#\~}/g, '#}');
-        }
-        break;
+        case 'tpl':
+        case 'twig':
+          prefix = text.substring(0, 2);
+          if (prefix !== '{#') {
+            mod_text = text.replace(/{\#/g, '{~#');
+            mod_text = mod_text.replace(/\#}/g, '#~}');
+            mod_text = '{# ' + mod_text + ' #}';
+          } else {
+            mod_text = text.replace(/{\# /g, '');
+            mod_text = mod_text.replace(/ \#}/g, '');
+            mod_text = mod_text.replace(/{\~\#/g, '{#');
+            mod_text = mod_text.replace(/\#\~}/g, '#}');
+          }
+          break;
 
-      default:
-        prefix = text.substring(0, 4);
-        if (prefix !== '<!--') {
-          mod_text = text.replace(/<!--/g, '<!~~');
-          mod_text = mod_text.replace(/-->/g, '~~>');
-          mod_text = '<!-- ' + mod_text + ' -->';
-        } else {
-          mod_text = text.replace(/<!-- /g, '');
-          mod_text = mod_text.replace(/<!--/g, '');
-          mod_text = mod_text.replace(/-->/g, '');
-          mod_text = mod_text.replace(/<!~~/g, '<!--');
-          mod_text = mod_text.replace(/~~>/g, '-->');
-        }
-        break;
+        default:
+          prefix = text.substring(0, 4);
+          if (prefix !== '<!--') {
+            mod_text = text.replace(/<!--/g, '<!~~');
+            mod_text = mod_text.replace(/-->/g, '~~>');
+            mod_text = '<!-- ' + mod_text + ' -->';
+          } else {
+            mod_text = text.replace(/<!-- /g, '');
+            mod_text = mod_text.replace(/<!--/g, '');
+            mod_text = mod_text.replace(/-->/g, '');
+            mod_text = mod_text.replace(/<!~~/g, '<!--');
+            mod_text = mod_text.replace(/~~>/g, '-->');
+          }
+          break;
       }
 
       let edit = new vscode.WorkspaceEdit();

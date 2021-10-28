@@ -4,6 +4,10 @@ All notable changes to the "html-nested-comments" extension will be documented i
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## 2021-10-28
+
+- 🔧 Add `.tpl` Extension Support
+
 ## 2019-05-28
 
 - 🐛 Fix HTML Nesting Bug
