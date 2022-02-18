@@ -8,6 +8,7 @@
 		"name": "Phil Sinatra",
 		"url": "http://philsinatra.com"
 	},
+	"publisher": "philsinatra",
 	"license": "MIT",
 	"repository": {
 		"type": "git",
