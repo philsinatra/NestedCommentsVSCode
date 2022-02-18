@@ -4,6 +4,12 @@ All notable changes to the "html-nested-comments" extension will be documented i
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [3.0.3] 💄 Update Icon Transparency
+
+## [3.0.2] 🔧 Add Publisher
+
+## [3.0.1] 🔧 Update Test Scripts
+
 ## [3.0.0] 🔖 Version 3.0 With Svelte Support
 
 - Add support for Svelte components
