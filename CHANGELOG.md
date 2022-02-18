@@ -4,6 +4,13 @@ All notable changes to the "html-nested-comments" extension will be documented i
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [3.0.0] 🔖 Version 3.0 With Svelte Support
+
+- Add support for Svelte components
+- Upgrade to match version 1.64
+- Update screenshots
+- Update icon
+
 ## 2021-10-28
 
 - 🔧 Add `.tpl` Extension Support

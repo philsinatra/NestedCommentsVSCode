@@ -1,0 +1,17 @@
+{
+  "arrowParens": "avoid",
+  "bracketSpacing": true,
+  "printWidth": 100,
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "none",
+  "useTabs": true,
+  "overrides": [
+    {
+      "files": ["*.svelte"],
+      "options": {
+        "svelteBracketNewLine": true
+      }
+    }
+  ]
+}

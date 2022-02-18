@@ -1,12 +1,12 @@
 {
 	"name": "nested-comments",
-	"displayName": "Nest Comments",
+	"displayName": "Nested Comments",
 	"description": "This is a VSCode extension for toggling nested comments.",
 	"version": "2.3.1",
-	"publisher": "philsinatra",
 	"author": {
+		"email": "code@philsinatra.com",
 		"name": "Phil Sinatra",
-		"email": "phil@philsinatra.com"
+		"url": "http://philsinatra.com"
 	},
 	"license": "MIT",
 	"repository": {
@@ -18,14 +18,14 @@
 	},
 	"homepage": "http://philsinatra.com/html-nested-comments.html",
 	"engines": {
-		"vscode": "^1.17.0"
+		"vscode": "^1.64.0"
 	},
 	"categories": [
 		"Formatters",
 		"Other"
 	],
 	"galleryBanner": {
-		"color": "#000000",
+		"color": "#6868ac",
 		"theme": "dark"
 	},
 	"keywords": [
@@ -41,16 +41,19 @@
 	"icon": "images/icon.png",
 	"screenshots": [
 		{
-			"path": "images/html.gif"
+			"path": "images/nest-html.gif"
 		},
 		{
-			"path": "images/css.gif"
+			"path": "images/nest-css.gif"
+		},
+		{
+			"path": "images/nest-jsx.gif"
 		}
 	],
 	"activationEvents": [
 		"onCommand:extension.nestComments"
 	],
-	"main": "./out/extension",
+	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
@@ -71,13 +74,21 @@
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
-		"postinstall": "node ./node_modules/vscode/bin/install",
-		"test": "npm run compile && node ./node_modules/vscode/bin/test"
+		"pretest": "npm run compile && npm run lint",
+		"lint": "eslint src --ext ts",
+		"test": "node ./out/test/runTest.js"
 	},
 	"devDependencies": {
-		"@types/mocha": "^2.2.42",
-		"@types/node": "^7.0.43",
-		"typescript": "^2.5.3",
-		"vscode": "^1.1.21"
+		"@types/vscode": "^1.64.0",
+		"@types/glob": "^7.2.0",
+		"@types/mocha": "^9.0.0",
+		"@types/node": "14.x",
+		"@typescript-eslint/eslint-plugin": "^5.9.1",
+		"@typescript-eslint/parser": "^5.9.1",
+		"eslint": "^8.6.0",
+		"glob": "^7.2.0",
+		"mocha": "^9.1.3",
+		"typescript": "^4.5.4",
+		"@vscode/test-electron": "^2.0.3"
 	}
 }

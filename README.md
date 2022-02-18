@@ -1,8 +1,8 @@
-![Visual Studio Marketplace](https://img.shields.io/vscode-marketplace/v/philsinatra.nested-comments.svg?style=flat-square)
-[![Visual Studio Marketplace](https://img.shields.io/vscode-marketplace/d/philsinatra.nested-comments.svg?style=flat-square)]()
-[![license](https://img.shields.io/github/license/philsinatra/NestedCommentsVSCode.svg?style=flat-square)](https://github.com/philsinatra/NestedCommentsVSCode/blob/master/LICENSE)
+# Nested Comments
 
-# Nest Comments
+![Visual Studio Marketplace](https://img.shields.io/vscode-marketplace/v/philsinatra.nested-comments.svg?style=flat-square)
+[![Visual Studio Marketplace](https://img.shields.io/vscode-marketplace/d/philsinatra.nested-comments.svg?style=flat-square)]
+[![license](https://img.shields.io/github/license/philsinatra/NestedCommentsVSCode.svg?style=flat-square)](https://github.com/philsinatra/NestedCommentsVSCode/blob/master/LICENSE)
 
 ## About
 
@@ -68,7 +68,7 @@ Becomes:
 
 ### JSX Syntax
 
-![JSX example](images/nest-react.gif)
+![JSX example](images/nest-jsx.gif)
 
 This commenting style will work for JSX content in `.js` and `.ts` files. Make sure to set the language mode of the file to `javascriptreact`/`typescriptreact` rather than using standard JavaScript for files using JSX.
 
@@ -122,6 +122,7 @@ The following languages are supported:
 - md
 - njk
 - php
+- svelte
 - svg
 - tsx
 - twig
