@@ -92,6 +92,22 @@ class NestComments {
 					}
 					break
 
+				case 'razor':
+				case 'aspnetcorerazor':
+					// @* / *@
+					prefix = text.substring(0, 2)
+					if (prefix !== '@*') {
+						modText = text.replace(/@\*/g, '{~*')
+						modText = modText.replace(/\*}/g, '*~}')
+						modText = '@* ' + modText + ' *@'
+					} else {
+						modText = text.replace(/{\* /g, '')
+						modText = modText.replace(/ \*}/g, '')
+						modText = modText.replace(/{\~\*/g, '@*')
+						modText = modText.replace(/\*\~}/g, '*@')
+					}
+					break
+
 				default:
 					prefix = text.substring(0, 4)
 					if (prefix !== '<!--') {
