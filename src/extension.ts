@@ -30,6 +30,7 @@ class NestComments {
 			'md',
 			'njk',
 			'php',
+			'blade',
 			'twig',
 			'svelte',
 			'svg',
@@ -91,7 +92,19 @@ class NestComments {
 						modText = modText.replace(/\#\~}/g, '#}')
 					}
 					break
-
+				case 'blade':
+					prefix = text.substring(0, 4);
+					if (prefix !== '{{--') {
+					  mod_text = text.replace(/{{--/g, '{{~~');
+					  mod_text = mod_text.replace(/--}}/g, '~~}}');
+					  mod_text = '{{-- ' + mod_text + ' --}}';
+					} else {
+					  mod_text = text.replace(/{{-- /g, '');
+					  mod_text = mod_text.replace(/ --}}/g, '');
+					  mod_text = mod_text.replace(/{{~~/g, '{{--');
+					  mod_text = mod_text.replace(/~~}}/g, '--}}');
+					}
+					break;
 				default:
 					prefix = text.substring(0, 4)
 					if (prefix !== '<!--') {
