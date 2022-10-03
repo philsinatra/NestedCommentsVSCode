@@ -36,7 +36,8 @@ class NestComments {
 			'tpl',
 			'vue',
 			'xml',
-			'xsl'
+			'xsl',
+			'xslt'
 		]
 
 		if (supported.indexOf(doc.languageId) > -1) {
