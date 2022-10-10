@@ -2,7 +2,7 @@
 	"name": "nested-comments",
 	"displayName": "Nested Comments",
 	"description": "This is a VSCode extension for toggling nested comments.",
-	"version": "3.0.3",
+	"version": "3.0.4",
 	"author": {
 		"email": "code@philsinatra.com",
 		"name": "Phil Sinatra",
