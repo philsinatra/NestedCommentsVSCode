@@ -124,11 +124,13 @@ The following languages are supported:
 - php
 - svelte
 - svg
+- tpl
 - tsx
 - twig
 - vue
 - xml
 - xsl
+- blade
 
 ## Known Issues
 

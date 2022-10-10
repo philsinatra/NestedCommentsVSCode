@@ -94,18 +94,18 @@ class NestComments {
 					}
 					break
 				case 'blade':
-					prefix = text.substring(0, 4);
+					prefix = text.substring(0, 4)
 					if (prefix !== '{{--') {
-					  mod_text = text.replace(/{{--/g, '{{~~');
-					  mod_text = mod_text.replace(/--}}/g, '~~}}');
-					  mod_text = '{{-- ' + mod_text + ' --}}';
+						modText = text.replace(/{{--/g, '{{~~')
+						modText = modText.replace(/--}}/g, '~~}}')
+						modText = '{{-- ' + modText + ' --}}'
 					} else {
-					  mod_text = text.replace(/{{-- /g, '');
-					  mod_text = mod_text.replace(/ --}}/g, '');
-					  mod_text = mod_text.replace(/{{~~/g, '{{--');
-					  mod_text = mod_text.replace(/~~}}/g, '--}}');
+						modText = text.replace(/{{-- /g, '')
+						modText = modText.replace(/ --}}/g, '')
+						modText = modText.replace(/{{~~/g, '{{--')
+						modText = modText.replace(/~~}}/g, '--}}')
 					}
-					break;
+					break
 				default:
 					prefix = text.substring(0, 4)
 					if (prefix !== '<!--') {
