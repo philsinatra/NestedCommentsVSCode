@@ -118,6 +118,7 @@ The following languages are supported:
 - css
 - htm
 - html
+- js
 - jsx
 - md
 - njk
@@ -125,6 +126,7 @@ The following languages are supported:
 - svelte
 - svg
 - tpl
+- ts
 - tsx
 - twig
 - vue

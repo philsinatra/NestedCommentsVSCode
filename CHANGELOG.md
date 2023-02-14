@@ -4,6 +4,13 @@ All notable changes to the "html-nested-comments" extension will be documented i
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [4.0.0] 🔖 Version 4.0
+
+- Fix for Svelte/Vue
+- Add support for `*.js` and `*.ts` files
+- Fix selection after toggle to include the initial block comment indicator
+- Code refactor/cleanup
+- 
 ## [3.0.3] 💄 Update Icon Transparency
 
 ## [3.0.2] 🔧 Add Publisher

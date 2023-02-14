@@ -12,12 +12,9 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 class NestComments {
-	public updateNestedComments() {
+	async updateNestedComments() {
 		let editor = vscode.window.activeTextEditor
-		if (!editor) {
-			return
-		}
-
+		if (!editor) return
 		const doc = editor.document
 		const supported = [
 			'asp',
@@ -25,7 +22,9 @@ class NestComments {
 			'css',
 			'htm',
 			'html',
+			'javascript',
 			'javascriptreact',
+			'typescript',
 			'typescriptreact',
 			'md',
 			'njk',
@@ -40,107 +39,80 @@ class NestComments {
 			'xsl',
 			'xslt'
 		]
-
-		if (supported.indexOf(doc.languageId) > -1) {
+		if (!supported.indexOf(doc.languageId)) {
+			vscode.window.showInformationMessage(`${doc.languageId} file format not supported!`)
+			return
+		} else {
 			const selection = editor.selection
-			const text = editor.document.getText(selection)
-
-			let prefix
+			const allText = editor.document.getText()
+			const selText = editor.document.getText(selection)
+			let language = doc.languageId
 			let modText = ''
-
-			switch (doc.languageId) {
+			if (language === 'svelte' || language === 'vue') language = wrappingRootTag(allText, selText)
+			switch (language) {
+				case 'javascript':
+				case 'typescript':
 				case 'css':
-					prefix = text.substring(0, 2)
-					if (prefix !== '/*') {
-						modText = text.replace(/\/\*/g, '/~')
-						modText = modText.replace(/\*\//g, '~/')
-						modText = '/*' + modText + '*/'
-					} else {
-						modText = text.replace(/\/\*/g, '')
-						modText = modText.replace(/\/\*/g, '')
-						modText = modText.replace(/\*\//g, '')
-						modText = modText.replace(/\/~/g, '/*')
-						modText = modText.replace(/\~\//g, '*/')
-					}
+					modText = toggleComment(selText, '/*', '*/', '/~', '~/')
 					break
-
 				case 'javascriptreact':
 				case 'typescriptreact':
-					prefix = text.substring(0, 3)
-					if (prefix !== '{/*') {
-						modText = text.replace(/\/\*/g, '/~')
-						modText = modText.replace(/\*\//g, '~/')
-						modText = '{/*' + modText + '*/}'
-					} else {
-						modText = text.replace(/{\/\*/g, '')
-						modText = modText.replace(/\*\/}/g, '')
-						modText = modText.replace(/\/~/g, '/*')
-						modText = modText.replace(/\~\//g, '*/')
-					}
+					modText = toggleComment(selText, '{/*', '*/}', '/~', '~/')
 					break
-
 				case 'tpl':
 				case 'twig':
-					prefix = text.substring(0, 2)
-					if (prefix !== '{#') {
-						modText = text.replace(/{\#/g, '{~#')
-						modText = modText.replace(/\#}/g, '#~}')
-						modText = '{# ' + modText + ' #}'
-					} else {
-						modText = text.replace(/{\# /g, '')
-						modText = modText.replace(/ \#}/g, '')
-						modText = modText.replace(/{\~\#/g, '{#')
-						modText = modText.replace(/\#\~}/g, '#}')
-					}
+					modText = toggleComment(selText, '{#', '#}', '{~#', '#~}')
 					break
 				case 'blade':
-					prefix = text.substring(0, 4)
-					if (prefix !== '{{--') {
-						modText = text.replace(/{{--/g, '{{~~')
-						modText = modText.replace(/--}}/g, '~~}}')
-						modText = '{{-- ' + modText + ' --}}'
-					} else {
-						modText = text.replace(/{{-- /g, '')
-						modText = modText.replace(/ --}}/g, '')
-						modText = modText.replace(/{{~~/g, '{{--')
-						modText = modText.replace(/~~}}/g, '--}}')
-					}
+					modText = toggleComment(selText, '{{--', ' --}}', '{{~~', '~~}}')
 					break
+				case 'html':
 				default:
-					prefix = text.substring(0, 4)
-					if (prefix !== '<!--') {
-						modText = text.replace(/<!--/g, '<!~~')
-						modText = modText.replace(/-->/g, '~~>')
-						modText = '<!-- ' + modText + ' -->'
-					} else {
-						modText = text.replace(/<!-- /g, '')
-						modText = modText.replace(/<!--/g, '')
-						modText = modText.replace(/-->/g, '')
-						modText = modText.replace(/<!~~/g, '<!--')
-						modText = modText.replace(/~~>/g, '-->')
-					}
+					modText = toggleComment(selText, '<!--', ' -->', '<!~~', '~~>')
 					break
 			}
-
 			let edit = new vscode.WorkspaceEdit()
-
-			const startPos: vscode.Position = new vscode.Position(
-				selection.start.line,
-				selection.start.character
+			let startPos = new vscode.Position(selection.start.line, selection.start.character)
+			const endPos = new vscode.Position(
+				selection.start.line + selText.split(/\r\n|\r|\n/).length - 1,
+				selection.start.character + selText.length
 			)
-			const endPos: vscode.Position = new vscode.Position(
-				selection.start.line + text.split(/\r\n|\r|\n/).length - 1,
-				selection.start.character + text.length
-			)
-
 			const range = new vscode.Range(startPos, endPos)
-
 			edit.replace(editor.document.uri, range, modText)
+			await vscode.workspace.applyEdit(edit)
+			editor.selections = [
+				new vscode.Selection(
+					startPos,
+					new vscode.Position(endPos.line, endPos.character + (modText.length - selText.length))
+				)
+			]
 			return vscode.workspace.applyEdit(edit)
-		} else {
-			vscode.window.showInformationMessage('File format not supported!')
 		}
 	}
+}
+
+function wrappingRootTag(text, selection) {
+	let tag = [...text.matchAll(/<(\w+).*?>(.*)<\/\1>/gms)].find(tag => tag[2].includes(selection))
+	tag = tag ? tag[1] : tag
+	if (tag === 'script') return 'javascript'
+	else if (tag === 'style') return 'css'
+	else return 'html'
+}
+
+function toggleComment(text, prefix, suffix, nestedPrefix, nestedSuffix) {
+	const escape = txt => txt.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&')
+	let startWithPrefix = new RegExp(`^\s*${escape(prefix)}`, 'g')
+	if (text.match(startWithPrefix)) {
+		text = text.replaceAll(prefix, '')
+		text = text.replaceAll(suffix, '')
+		text = text.replaceAll(nestedPrefix, prefix)
+		text = text.replaceAll(nestedSuffix, suffix)
+	} else {
+		text = text.replaceAll(prefix, nestedPrefix)
+		text = text.replaceAll(suffix, nestedSuffix)
+		text = `${prefix}${text}${suffix}`
+	}
+	return text
 }
 
 // this method is called when your extension is deactivated
