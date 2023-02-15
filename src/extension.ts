@@ -80,29 +80,23 @@ class NestComments {
 			const range = new vscode.Range(startPos, endPos)
 			edit.replace(editor.document.uri, range, modText)
 			await vscode.workspace.applyEdit(edit)
-			editor.selections = [
-				new vscode.Selection(
-					startPos,
-					new vscode.Position(endPos.line, endPos.character + (modText.length - selText.length))
-				)
-			]
-			return vscode.workspace.applyEdit(edit)
+			let delta = modText.length - selText.length
+			editor.selections = [new vscode.Selection(startPos, endPos.translate(0, delta))]
+			return
 		}
 	}
 }
 
 function wrappingRootTag(text, selection) {
 	let tag = [...text.matchAll(/<(\w+).*?>(.*)<\/\1>/gms)].find(tag => tag[2].includes(selection))
-	tag = tag ? tag[1] : tag
+	if (tag) tag = tag[1]
 	if (tag === 'script') return 'javascript'
 	else if (tag === 'style') return 'css'
 	else return 'html'
 }
 
 function toggleComment(text, prefix, suffix, nestedPrefix, nestedSuffix) {
-	const escape = txt => txt.replace(/[-[\]{}()*+?.,\\/^$|#\s]/g, '\\$&')
-	let startWithPrefix = new RegExp(`^\s*${escape(prefix)}`, 'g')
-	if (text.match(startWithPrefix)) {
+	if (text.trimStart().startsWith(prefix)) {
 		text = text.replaceAll(prefix, '')
 		text = text.replaceAll(suffix, '')
 		text = text.replaceAll(nestedPrefix, prefix)
