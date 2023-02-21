@@ -39,7 +39,8 @@ class NestComments {
 			'xsl',
 			'xslt'
 		]
-		if (!supported.indexOf(doc.languageId)) {
+
+		if (supported.indexOf(doc.languageId) === -1) {
 			vscode.window.showInformationMessage(`${doc.languageId} file format not supported!`)
 			return
 		} else {
