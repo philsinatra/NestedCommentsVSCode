@@ -97,7 +97,7 @@ function wrappingRootTag(text, selection) {
 }
 
 function toggleComment(text, prefix, suffix, nestedPrefix, nestedSuffix) {
-	if (text.trimStart().startsWith(prefix)) {
+	if (text.trimStart().startsWith(prefix) && text.trimEnd().endsWith(suffix)) {
 		text = text.replaceAll(prefix, '')
 		text = text.replaceAll(suffix, '')
 		text = text.replaceAll(nestedPrefix, prefix)
