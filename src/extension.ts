@@ -39,16 +39,15 @@ class NestComments {
 			'xsl',
 			'xslt'
 		]
-
 		if (supported.indexOf(doc.languageId) === -1) {
 			vscode.window.showInformationMessage(`${doc.languageId} file format not supported!`)
 			return
 		} else {
-			const selection = editor.selection
 			const allText = editor.document.getText()
-			const selText = editor.document.getText(selection)
+			const selText = editor.document.getText(editor.selection)
 			let language = doc.languageId
 			let modText = ''
+
 			if (language === 'svelte' || language === 'vue') language = wrappingRootTag(allText, selText)
 			switch (language) {
 				case 'javascript':
@@ -72,17 +71,7 @@ class NestComments {
 					modText = toggleComment(selText, '<!--', ' -->', '<!~~', '~~>')
 					break
 			}
-			let edit = new vscode.WorkspaceEdit()
-			let startPos = new vscode.Position(selection.start.line, selection.start.character)
-			const endPos = new vscode.Position(
-				selection.start.line + selText.split(/\r\n|\r|\n/).length - 1,
-				selection.start.character + selText.length
-			)
-			const range = new vscode.Range(startPos, endPos)
-			edit.replace(editor.document.uri, range, modText)
-			await vscode.workspace.applyEdit(edit)
-			let delta = modText.length - selText.length
-			editor.selections = [new vscode.Selection(startPos, endPos.translate(0, delta))]
+			editor.edit(editBuilder => editBuilder.replace(editor.selection, modText))
 			return
 		}
 	}
