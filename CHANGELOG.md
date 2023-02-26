@@ -8,6 +8,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - Fix for Svelte/Vue
 - Add support for `*.js` and `*.ts` files
+- Added support for multiple cursor selections
 - Fix selection after toggle to include the initial block comment indicator
 - Code refactor/cleanup
 - 

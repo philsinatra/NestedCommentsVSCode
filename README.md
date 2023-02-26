@@ -8,7 +8,7 @@
 
 If your code contains a comment, and you want to add a new comment to temporarily disable a block or portion of code, the built in commenting functionality does not actually place the comment tags in expected locations. If an existing comment is included in the content being commented out, the first instance of a `-->` or `*/` closing comment tag will end the entire comment.
 
-This extension will convert pre-existing comments to safe characters, allowing a new block comment that includes the original comment. It also reverses the effect to uncomment the same block of code.
+This extension will convert pre-existing comments to safe characters, allowing a new block comment that includes the original comment. It also reverses the effect to uncomment the same block of code. Additionally, this extension will work with multiple cursor selections.
 
 ## Features
 

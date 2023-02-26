@@ -12,7 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 class NestComments {
-	async updateNestedComments() {
+	updateNestedComments() {
 		let editor = vscode.window.activeTextEditor
 		if (!editor) return
 		const doc = editor.document
@@ -43,36 +43,41 @@ class NestComments {
 			vscode.window.showInformationMessage(`${doc.languageId} file format not supported!`)
 			return
 		} else {
-			const allText = editor.document.getText()
-			const selText = editor.document.getText(editor.selection)
-			let language = doc.languageId
-			let modText = ''
+			return editor.edit(editBuilder => {
+				editor.selections.map(selection => {
+					const allText = editor.document.getText()
+					const selText = editor.document.getText(selection)
 
-			if (language === 'svelte' || language === 'vue') language = wrappingRootTag(allText, selText)
-			switch (language) {
-				case 'javascript':
-				case 'typescript':
-				case 'css':
-					modText = toggleComment(selText, '/*', '*/', '/~', '~/')
-					break
-				case 'javascriptreact':
-				case 'typescriptreact':
-					modText = toggleComment(selText, '{/*', '*/}', '/~', '~/')
-					break
-				case 'tpl':
-				case 'twig':
-					modText = toggleComment(selText, '{#', '#}', '{~#', '#~}')
-					break
-				case 'blade':
-					modText = toggleComment(selText, '{{--', ' --}}', '{{~~', '~~}}')
-					break
-				case 'html':
-				default:
-					modText = toggleComment(selText, '<!--', ' -->', '<!~~', '~~>')
-					break
-			}
-			editor.edit(editBuilder => editBuilder.replace(editor.selection, modText))
-			return
+					let language = doc.languageId
+					let modText = ''
+					if (language === 'svelte' || language === 'vue')
+						language = wrappingRootTag(allText, selText)
+					switch (language) {
+						case 'javascript':
+						case 'typescript':
+						case 'css':
+							modText = toggleComment(selText, '/*', '*/', '/~', '~/')
+							break
+						case 'javascriptreact':
+						case 'typescriptreact':
+							modText = toggleComment(selText, '{/*', '*/}', '/~', '~/')
+							break
+						case 'tpl':
+						case 'twig':
+							modText = toggleComment(selText, '{#', '#}', '{~#', '#~}')
+							break
+						case 'blade':
+							modText = toggleComment(selText, '{{--', '--}}', '{{~~', '~~}}')
+							break
+						case 'html':
+						default:
+							modText = toggleComment(selText, '<!--', '-->', '<!~~', '~~>')
+							break
+					}
+
+					editBuilder.replace(selection, modText)
+				})
+			})
 		}
 	}
 }
