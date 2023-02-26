@@ -12,7 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 class NestComments {
-	updateNestedComments() {
+	public updateNestedComments() {
 		let editor = vscode.window.activeTextEditor
 		if (!editor) return
 		const doc = editor.document
