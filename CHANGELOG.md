@@ -6,14 +6,17 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [4.0.0] 🔖 Version 4.0
 
-- Added support for `*.js` and `*.ts` files
-- Added support for multiple cursor selections
-- Fixed Svelte/Vue support
-- Fixed Selection after commenting to include the initial block comment indicator. 
-- Fixed Selection starting with a block comment indicator and having an ending block comment indicator in middle with additional text selected. It would uncomment rather than comment.
-- Fixed Selection ending on line with additional unselected content. This would cause additional unselected content to be deleted on nesting or unnesting. 
-- Change Code refactor/cleanup
-  
+### 🎉 The [Scott Rhamy](https://github.com/cycle4passion) update!
+
+A big thank you to [Scott Rhamy](https://github.com/cycle4passion) for this major update that finally brings support to Svelte/Vue.
+
+- Add support for `*.js` and `*.ts` files
+- Add support for multiple cursor selections
+- Add Svelte/Vue support
+- Fix Selection after commenting to include the initial block comment indicator.
+- Fix Selection starting with a block comment indicator and having an ending block comment indicator in middle with additional text selected. It would uncomment rather than comment.
+- Fix Selection ending on line with additional unselected content. This would cause additional unselected content to be deleted on nesting or unnesting.
+
 ## [3.0.3] 💄 Update Icon Transparency
 
 ## [3.0.2] 🔧 Add Publisher

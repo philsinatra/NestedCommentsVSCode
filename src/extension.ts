@@ -11,6 +11,34 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposable)
 }
 
+function wrappingRootTag(text, selection) {
+	let tag = [...text.matchAll(/<(\w+).*?>(.*)<\/\1>/gms)].find(tag => tag[2].includes(selection))
+	if (tag) tag = tag[1]
+	if (tag === 'script') return 'javascript'
+	else if (tag === 'style') return 'css'
+	else return 'html'
+}
+
+function toggleComment(
+	text: string,
+	prefix: string,
+	suffix: string,
+	nestedPrefix: string,
+	nestedSuffix: string
+) {
+	if (text.trimStart().startsWith(prefix) && text.trimEnd().endsWith(suffix)) {
+		text = text.replaceAll(prefix, '')
+		text = text.replaceAll(suffix, '')
+		text = text.replaceAll(nestedPrefix, prefix)
+		text = text.replaceAll(nestedSuffix, suffix)
+	} else {
+		text = text.replaceAll(prefix, nestedPrefix)
+		text = text.replaceAll(suffix, nestedSuffix)
+		text = `${prefix}${text}${suffix}`
+	}
+	return text
+}
+
 class NestComments {
 	public updateNestedComments() {
 		let editor = vscode.window.activeTextEditor
@@ -80,28 +108,6 @@ class NestComments {
 			})
 		}
 	}
-}
-
-function wrappingRootTag(text, selection) {
-	let tag = [...text.matchAll(/<(\w+).*?>(.*)<\/\1>/gms)].find(tag => tag[2].includes(selection))
-	if (tag) tag = tag[1]
-	if (tag === 'script') return 'javascript'
-	else if (tag === 'style') return 'css'
-	else return 'html'
-}
-
-function toggleComment(text, prefix, suffix, nestedPrefix, nestedSuffix) {
-	if (text.trimStart().startsWith(prefix) && text.trimEnd().endsWith(suffix)) {
-		text = text.replaceAll(prefix, '')
-		text = text.replaceAll(suffix, '')
-		text = text.replaceAll(nestedPrefix, prefix)
-		text = text.replaceAll(nestedSuffix, suffix)
-	} else {
-		text = text.replaceAll(prefix, nestedPrefix)
-		text = text.replaceAll(suffix, nestedSuffix)
-		text = `${prefix}${text}${suffix}`
-	}
-	return text
 }
 
 // this method is called when your extension is deactivated
