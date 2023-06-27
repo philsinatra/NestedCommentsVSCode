@@ -4,6 +4,8 @@ All notable changes to the "html-nested-comments" extension will be documented i
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [4.0.1] 🩹 Update Markdown support
+
 ## [4.0.0] 🔖 Version 4.0
 
 ### 🎉 The [Scott Rhamy](https://github.com/cycle4passion) update!

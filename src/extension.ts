@@ -54,6 +54,7 @@ class NestComments {
 			'javascriptreact',
 			'typescript',
 			'typescriptreact',
+			'markdown',
 			'md',
 			'njk',
 			'php',
@@ -73,37 +74,45 @@ class NestComments {
 		} else {
 			return editor.edit(editBuilder => {
 				editor.selections.map(selection => {
-					const allText = editor.document.getText()
-					const selText = editor.document.getText(selection)
-
+					const all_text = editor.document.getText()
+					const selected_text = editor.document.getText(selection)
 					let language = doc.languageId
-					let modText = ''
+					let modified_text = ''
+
 					if (language === 'svelte' || language === 'vue')
-						language = wrappingRootTag(allText, selText)
+						language = wrappingRootTag(all_text, selected_text)
+
 					switch (language) {
+						case 'markdown':
+							if (selected_text.includes('<!'))
+								modified_text = toggleComment(selected_text, '<!--', '-->', '<!~~', '~~>')
+							else if (selected_text.includes('/*'))
+								modified_text = toggleComment(selected_text, '/*', '*/', '/~', '~/')
+							else return false
+							break
 						case 'javascript':
 						case 'typescript':
 						case 'css':
-							modText = toggleComment(selText, '/*', '*/', '/~', '~/')
+							modified_text = toggleComment(selected_text, '/*', '*/', '/~', '~/')
 							break
 						case 'javascriptreact':
 						case 'typescriptreact':
-							modText = toggleComment(selText, '{/*', '*/}', '/~', '~/')
+							modified_text = toggleComment(selected_text, '{/*', '*/}', '/~', '~/')
 							break
 						case 'tpl':
 						case 'twig':
-							modText = toggleComment(selText, '{#', '#}', '{~#', '#~}')
+							modified_text = toggleComment(selected_text, '{#', '#}', '{~#', '#~}')
 							break
 						case 'blade':
-							modText = toggleComment(selText, '{{--', '--}}', '{{~~', '~~}}')
+							modified_text = toggleComment(selected_text, '{{--', '--}}', '{{~~', '~~}}')
 							break
 						case 'html':
 						default:
-							modText = toggleComment(selText, '<!--', '-->', '<!~~', '~~>')
+							modified_text = toggleComment(selected_text, '<!--', '-->', '<!~~', '~~>')
 							break
 					}
 
-					editBuilder.replace(selection, modText)
+					editBuilder.replace(selection, modified_text)
 				})
 			})
 		}
