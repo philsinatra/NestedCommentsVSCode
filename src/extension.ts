@@ -68,7 +68,10 @@ class NestComments {
 			'xsl',
 			'xslt'
 		]
-		if (supported.indexOf(doc.languageId) === -1) {
+
+		let customLanguages = vscode.workspace.getConfiguration('nested-comments').customLanguages;
+
+		if (supported.indexOf(doc.languageId) === -1 && !(doc.languageId in customLanguages)) {
 			vscode.window.showInformationMessage(`${doc.languageId} file format not supported!`)
 			return
 		} else {
@@ -78,6 +81,44 @@ class NestComments {
 					const selected_text = editor.document.getText(selection)
 					let language = doc.languageId
 					let modified_text = ''
+
+					if (doc.languageId in customLanguages) {
+						let settings = customLanguages[doc.languageId];
+
+						if (!('normal' in settings)) {
+							vscode.window.showErrorMessage(`${doc.languageId}.nested does not exist!`)
+							return false;
+						}
+						let normal = settings['normal'];
+						if (!Array.isArray(normal)) {
+							vscode.window.showErrorMessage(`${doc.languageId}.normal is not an array!`)
+							return false;
+						}
+						if (normal.length !== 2) {
+							vscode.window.showErrorMessage(`${doc.languageId}.normal must have two elements!`)
+							return false;
+						}
+
+						if (!('nested' in settings)) {
+							vscode.window.showErrorMessage(`${doc.languageId}.nested does not exist!`)
+							return false;
+						}
+						let nested = settings['nested'];
+						if (!Array.isArray(nested)) {
+							vscode.window.showErrorMessage(`${doc.languageId}.nested is not an array!`)
+							return false;
+						}
+						if (nested.length !== 2) {
+							vscode.window.showErrorMessage(`${doc.languageId}.nested must have two elements!`)
+							return false;
+						}
+
+						modified_text = toggleComment(selected_text, normal[0], normal[1], nested[0], nested[1]);
+
+						editBuilder.replace(selection, modified_text);
+
+						return;
+					}
 
 					if (language === 'svelte' || language === 'vue')
 						language = wrappingRootTag(all_text, selected_text)

@@ -69,7 +69,28 @@
 				"mac": "cmd+alt+/",
 				"when": "editorTextFocus && editorHasSelection"
 			}
-		]
+		],
+		"configuration": {
+			"title": "Nest Comments",
+			"properties": {
+				"nested-comments.customLanguages": {
+					"type": "object",
+					"default": {
+						"javascript": {
+							"normal": [
+								"/*",
+								"*/"
+							],
+							"nested": [
+								"/~",
+								"~/"
+							]
+						}
+					},
+					"description": "Specifies which comments to use for a language."
+				}
+			}
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
