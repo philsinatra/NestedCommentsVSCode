@@ -153,7 +153,7 @@ To add support for other languages add the following line to your `settings.json
 }
 ```
 
-replace `javascript` with your language of choice.
+Replace `javascript` with your language of choice.
 
 ## Known Issues
 

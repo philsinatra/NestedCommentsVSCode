@@ -86,7 +86,7 @@ class NestComments {
 						let settings = customLanguages[doc.languageId];
 
 						if (!('normal' in settings)) {
-							vscode.window.showErrorMessage(`${doc.languageId}.nested does not exist!`)
+							vscode.window.showErrorMessage(`${doc.languageId}.normal does not exist!`)
 							return false;
 						}
 						let normal = settings['normal'];
