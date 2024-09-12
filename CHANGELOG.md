@@ -4,6 +4,15 @@ All notable changes to the "html-nested-comments" extension will be documented i
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [4.1.0] 🔖 Version 4.1
+
+### 🎉 Enhanced support for embedded languages
+
+- Added intelligent language detection based on cursor position
+- Now correctly identifies and comments CSS within `<style>` tags in HTML files
+- Improved handling of JavaScript within `<script>` tags in HTML files
+- Better support for mixed-language files (e.g., PHP with embedded HTML, CSS, and JavaScript)
+
 ## [4.0.0] 🔖 Version 4.0
 
 ### 🎉 The [Scott Rhamy](https://github.com/cycle4passion) update!

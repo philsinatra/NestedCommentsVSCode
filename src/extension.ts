@@ -11,14 +11,6 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposable)
 }
 
-function wrappingRootTag(text, selection) {
-	let tag = [...text.matchAll(/<(\w+).*?>(.*)<\/\1>/gms)].find(tag => tag[2].includes(selection))
-	if (tag) tag = tag[1]
-	if (tag === 'script') return 'javascript'
-	else if (tag === 'style') return 'css'
-	else return 'html'
-}
-
 function toggleComment(
 	text: string,
 	prefix: string,
@@ -44,6 +36,7 @@ class NestComments {
 		let editor = vscode.window.activeTextEditor
 		if (!editor) return
 		const doc = editor.document
+
 		const supported = [
 			'asp',
 			'cfm',
@@ -76,10 +69,9 @@ class NestComments {
 					const allText = editor.document.getText()
 					const selText = editor.document.getText(selection)
 
-					let language = doc.languageId
+					let language = this.getLanguageAtCursor(doc, selection.start)
 					let modText = ''
-					if (language === 'svelte' || language === 'vue')
-						language = wrappingRootTag(allText, selText)
+
 					switch (language) {
 						case 'javascript':
 						case 'typescript':
@@ -107,6 +99,38 @@ class NestComments {
 				})
 			})
 		}
+	}
+
+	private getLanguageAtCursor(document: vscode.TextDocument, position: vscode.Position): string {
+		const allText = document.getText()
+		const offset = document.offsetAt(position)
+
+		// Check for <style> tag
+		const styleMatch = allText.match(/<style[^>]*>[\s\S]*?<\/style>/gi)
+		if (styleMatch) {
+			for (const match of styleMatch) {
+				const startIndex = allText.indexOf(match)
+				const endIndex = startIndex + match.length
+				if (offset >= startIndex && offset <= endIndex) {
+					return 'css'
+				}
+			}
+		}
+
+		// Check for <script> tag
+		const scriptMatch = allText.match(/<script[^>]*>[\s\S]*?<\/script>/gi)
+		if (scriptMatch) {
+			for (const match of scriptMatch) {
+				const startIndex = allText.indexOf(match)
+				const endIndex = startIndex + match.length
+				if (offset >= startIndex && offset <= endIndex) {
+					return 'javascript'
+				}
+			}
+		}
+
+		// Default to the document's language ID
+		return document.languageId
 	}
 }
 
