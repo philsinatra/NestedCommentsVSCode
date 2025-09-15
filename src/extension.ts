@@ -71,7 +71,9 @@ function toggleComment(
 	}
 	return text
 }
-
+function getNotSupportCommand(): boolean {
+  return vscode.workspace.getConfiguration('nestedComments').get('notSupportCommand') as boolean
+}
 class NestComments {
 	public updateNestedComments() {
 		const editor = vscode.window.activeTextEditor
@@ -103,7 +105,10 @@ class NestComments {
 			'xslt'
 		]
 		if (supported.indexOf(doc.languageId) === -1) {
-			vscode.window.showInformationMessage(`${doc.languageId} file format not supported!`)
+			if(getNotSupportCommand())
+				vscode.commands.executeCommand('editor.action.commentLine');
+			else
+				vscode.window.showInformationMessage(`${doc.languageId} file format not supported!`)
 			return
 		} else {
 			return editor.edit(editBuilder => {
