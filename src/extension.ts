@@ -2,21 +2,54 @@ import * as vscode from 'vscode'
 
 export function activate(context: vscode.ExtensionContext) {
 	console.log('Congratulations, your extension "Nested Comments" is now active!')
-	let nestComments = new NestComments()
+	const nestComments = new NestComments()
 
-	let disposable = vscode.commands.registerCommand('extension.nestComments', () => {
+	const disposable = vscode.commands.registerCommand('extension.nestComments', () => {
 		nestComments.updateNestedComments()
 	})
 
 	context.subscriptions.push(disposable)
 }
 
-function wrappingRootTag(text, selection) {
-	let tag = [...text.matchAll(/<(\w+).*?>(.*)<\/\1>/gms)].find(tag => tag[2].includes(selection))
-	if (tag) tag = tag[1]
-	if (tag === 'script') return 'javascript'
-	else if (tag === 'style') return 'css'
-	else return 'html'
+function wrappingRootTag(text: string, selection: string): string {
+	// Check for Astro frontmatter first (JS/TS between --- delimiters)
+	const fmRegex = /^---([\s\S]*?)---/
+	const fmMatch = text.match(fmRegex)
+	if (fmMatch?.[1]?.includes(selection)) return 'javascript'
+
+	// Find the position of the selection in the text
+	const selectionIndex = text.indexOf(selection)
+	if (selectionIndex === -1) return 'html'
+
+	// Look for script and style tags that contain the selection
+	const scriptRegex = /<script[^>]*>([\s\S]*?)<\/script>/gi
+	const styleRegex = /<style[^>]*>([\s\S]*?)<\/style>/gi
+
+	// Check style tags first
+	let match: RegExpExecArray | null = styleRegex.exec(text)
+	while (match !== null) {
+		const tagStart = match.index + match[0].indexOf('>') + 1
+		const tagEnd = match.index + match[0].lastIndexOf('<')
+
+		if (selectionIndex >= tagStart && selectionIndex < tagEnd) {
+			return 'css'
+		}
+		match = styleRegex.exec(text)
+	}
+
+	// Check script tags
+	match = scriptRegex.exec(text)
+	while (match !== null) {
+		const tagStart = match.index + match[0].indexOf('>') + 1
+		const tagEnd = match.index + match[0].lastIndexOf('<')
+
+		if (selectionIndex >= tagStart && selectionIndex < tagEnd) {
+			return 'javascript'
+		}
+		match = scriptRegex.exec(text)
+	}
+
+	return 'html'
 }
 
 function toggleComment(
@@ -41,11 +74,12 @@ function toggleComment(
 
 class NestComments {
 	public updateNestedComments() {
-		let editor = vscode.window.activeTextEditor
+		const editor = vscode.window.activeTextEditor
 		if (!editor) return
 		const doc = editor.document
 		const supported = [
 			'asp',
+			'astro',
 			'cfm',
 			'css',
 			'htm',
@@ -73,13 +107,13 @@ class NestComments {
 			return
 		} else {
 			return editor.edit(editBuilder => {
-				editor.selections.map(selection => {
+				editor.selections.forEach(selection => {
 					const all_text = editor.document.getText()
 					const selected_text = editor.document.getText(selection)
 					let language = doc.languageId
 					let modified_text = ''
 
-					if (language === 'svelte' || language === 'vue')
+					if (language === 'svelte' || language === 'vue' || language === 'astro')
 						language = wrappingRootTag(all_text, selected_text)
 
 					switch (language) {
@@ -88,7 +122,7 @@ class NestComments {
 								modified_text = toggleComment(selected_text, '<!--', '-->', '<!~~', '~~>')
 							else if (selected_text.includes('/*'))
 								modified_text = toggleComment(selected_text, '/*', '*/', '/~', '~/')
-							else return false
+							else return
 							break
 						case 'javascript':
 						case 'typescript':
@@ -106,7 +140,6 @@ class NestComments {
 						case 'blade':
 							modified_text = toggleComment(selected_text, '{{--', '--}}', '{{~~', '~~}}')
 							break
-						case 'html':
 						default:
 							modified_text = toggleComment(selected_text, '<!--', '-->', '<!~~', '~~>')
 							break
@@ -120,4 +153,6 @@ class NestComments {
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() {
+	console.log('NestedComments deactivated')
+}

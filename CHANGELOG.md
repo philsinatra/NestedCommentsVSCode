@@ -1,10 +1,12 @@
 # Change Log
 
-All notable changes to the "html-nested-comments" extension will be documented in this file.
+All notable changes to the "nested-comments" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [4.0.1] 🩹 Update Markdown support
+## 4.1.1 Add Astro support 
+
+## [4.1.0] 🩹 Update Markdown support
 
 ## [4.0.0] 🔖 Version 4.0
 
