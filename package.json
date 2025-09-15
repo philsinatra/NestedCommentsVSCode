@@ -62,17 +62,17 @@
 				"title": "Nest Comments"
 			}
 		],
-    "configuration": {
-      "type": "object",
-      "title": "NestedComments",
-      "properties": {
-        "nestedComments.notSupportCommand": {
-          "type": "boolean",
-          "default": false,
-          "description": "Does not support executing system comments."
-        }
-      }
-    },
+		"configuration": {
+			"type": "object",
+			"title": "NestedComments",
+			"properties": {
+				"nestedComments.notSupportCommand": {
+					"type": "boolean",
+					"default": false,
+					"description": "Does not support executing system comments."
+				}
+			}
+		},
 		"keybindings": [
 			{
 				"command": "extension.nestComments",
